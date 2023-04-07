@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    app: snappass
+    name: snappass
+    tier: backend
+  name: snappass
+spec:
+  containers:
+  - env:
+    - name: REDIS_HOST
+      value: snappass-redis
+    image: docker.io/samueldg/snappass
+    name: snappass
+    ports:
+    - containerPort: 5000
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: snappass
+    name: snappass
+    tier: backend
+  name: snappass
+spec:
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: snappass
+    name: snappass
+    tier: backend
+  type: ClusterIP
+status:
+  loadBalancer: {}
